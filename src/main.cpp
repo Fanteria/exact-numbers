@@ -10,6 +10,10 @@
 #include <string>
 #include <vector>
 
+using std::cout, std::endl;
+using std::map, std::pair, std::set, std::vector;
+using std::string;
+
 class ExactNumber {
   int numerator;   // citatel
   int denominator; // jmenovatel
@@ -92,13 +96,12 @@ std::ostream &operator<<(std::ostream &os, ExactNumber num) {
 }
 
 class Calculator {
-  std::map<std::string, ExactNumber> variables;
-  std::string delimiter = " ";
-  const std::set<std::string> numOperators = {"+", "-", "/", "*"};
-  const std::set<std::string> logOperators = {"==", "!=", ">", ">=", "<", "<="};
+  map<string, ExactNumber> variables;
+  string delimiter = " ";
+  const set<string> numOperators = {"+", "-", "/", "*"};
+  const set<string> logOperators = {"==", "!=", ">", ">=", "<", "<="};
 
-  ExactNumber processNumericOperators(std::string left, std::string right,
-                                      std::string opt) {
+  ExactNumber processNumericOperators(string left, string right, string opt) {
     ExactNumber l = ((variables.count(left)) ? variables[left]
                                              : ExactNumber(std::stoi(left)));
     ExactNumber r = (variables.count(right)) ? variables[right]
@@ -116,8 +119,7 @@ class Calculator {
       throw std::invalid_argument("Neznámý operátor");
   }
 
-  bool processLogicOperators(std::string left, std::string right,
-                             std::string opt) {
+  bool processLogicOperators(string left, string right, string opt) {
     ExactNumber l = ((variables.count(left)) ? variables[left]
                                              : ExactNumber(std::stoi(left)));
     ExactNumber r = (variables.count(right)) ? variables[right]
@@ -138,10 +140,10 @@ class Calculator {
       throw std::invalid_argument("Neznámý operátor");
   }
 
-  void processLine(std::string &line) {
+  void processLine(string &line) {
     size_t pos;
-    std::vector<std::string> words;
-    while ((pos = line.find(delimiter)) != std::string::npos) {
+    vector<string> words;
+    while ((pos = line.find(delimiter)) != string::npos) {
       words.push_back(line.substr(0, pos));
       line.erase(0, pos + delimiter.length());
     }
@@ -150,53 +152,51 @@ class Calculator {
       words.push_back(line);
 
     if (words.size() < 3) {
-      std::cout << "Příliš málo argumentů." << std::endl;
+      cout << "Příliš málo argumentů." << endl;
       return;
     }
 
-    std::string opt = words[1];
+    string opt = words[1];
     if (opt == "=") {
       if (words.size() == 3) {
-        variables.insert(std::pair<std::string, ExactNumber>(
-            words[0], ExactNumber(std::stoi(words[2]))));
+        variables.insert(pair<std::string, ExactNumber>(
+            words[0], ExactNumber(stoi(words[2]))));
       } else if (words.size() == 5) {
         variables.insert(std::pair<std::string, ExactNumber>(
             words[0], processNumericOperators(words[2], words[4], words[3])));
       } else {
-        std::cout << "Špatný počet argumentů pro =.\n";
+        cout << "Špatný počet argumentů pro =.\n";
       }
     } else if (numOperators.count(opt)) {
-      std::cout << "Výsledek: "
-                << processNumericOperators(words[0], words[2], words[1])
-                << "\n";
+      cout << "Výsledek: "
+           << processNumericOperators(words[0], words[2], words[1]) << "\n";
     } else if (logOperators.count(opt)) {
-      std::cout << ((processLogicOperators(words[0], words[2], words[1]))
-                        ? "True"
-                        : "False")
-                << "\n";
+      cout << ((processLogicOperators(words[0], words[2], words[1])) ? "True"
+                                                                     : "False")
+           << "\n";
     } else {
-      std::cout << "Neznámý operátor.\n";
+      cout << "Neznámý operátor.\n";
     }
   }
 
 public:
   void start() {
-    std::string line;
+    string line;
 
-    std::cout << "Co chcete dělat?" << std::endl;
+    cout << "Co chcete dělat?" << endl;
     while (std::getline(std::cin, line)) {
       if (line == "q")
         break;
 
       processLine(line);
 
-      std::cout << "----------------------------------\n";
+      cout << "----------------------------------\n";
       if (!variables.empty()) {
-        std::cout << "Uložené proměnné:\n";
+        cout << "Uložené proměnné:\n";
         for (auto const &var : variables)
-          std::cout << var.first << " = " << var.second << '\n';
+          cout << var.first << " = " << var.second << '\n';
       }
-      std::cout << "Co chcete dělat?" << std::endl;
+      cout << "Co chcete dělat?" << endl;
     }
   }
 };
