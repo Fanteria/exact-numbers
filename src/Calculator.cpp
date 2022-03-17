@@ -8,6 +8,7 @@ using std::string;
 
 ExactNumber Calculator::processNumericOperators(string left, string right,
                                                 string opt) {
+  // Get ExactNumbers from strings
   ExactNumber l = ((variables.count(left)) ? variables[left]
                                            : ExactNumber(std::stoi(left)));
   ExactNumber r = (variables.count(right)) ? variables[right]
@@ -26,6 +27,7 @@ ExactNumber Calculator::processNumericOperators(string left, string right,
 }
 
 bool Calculator::processLogicOperators(string left, string right, string opt) {
+  // Get ExactNumbers from strings
   ExactNumber l = ((variables.count(left)) ? variables[left]
                                            : ExactNumber(std::stoi(left)));
   ExactNumber r = (variables.count(right)) ? variables[right]
@@ -66,6 +68,7 @@ void Calculator::processLine(string &line) {
   }
 
   string opt = words[1];
+  // First operator is =
   if (opt == "=") {
     if (words.size() == 3) {
       variables.insert(pair<std::string, ExactNumber>(
@@ -76,13 +79,16 @@ void Calculator::processLine(string &line) {
     } else {
       cout << "Špatný počet argumentů pro =.\n";
     }
+    // Operator is in numeric operators
   } else if (numOperators.count(opt)) {
-    cout << "Výsledek: "
-         << processNumericOperators(words[0], words[2], words[1]) << "\n";
+    cout << "Výsledek: ";
+    cout << processNumericOperators(words[0], words[2], words[1]);
+    cout << "\n";
+    // Operator is in logic operators
   } else if (logOperators.count(opt)) {
     cout << ((processLogicOperators(words[0], words[2], words[1])) ? "True"
-                                                                   : "False")
-         << "\n";
+                                                                   : "False");
+    cout << "\n";
   } else {
     cout << "Neznámý operátor.\n";
   }
@@ -96,6 +102,7 @@ void Calculator::start() {
     if (line == "exit")
       break;
 
+    // Try process lines and catch exceptions
     try {
       processLine(line);
     } catch (const invalid_argument &e) {
