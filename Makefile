@@ -25,7 +25,7 @@ clean:
 # $^ all rules for dependency (after :)
 # $< first parametr of dependency (before :)
 # $@ target of rule (before :)
-$(BIN)/$(TARGET): $(BIN)/main.o
+$(BIN)/$(TARGET): $(BIN)/main.o $(BIN)/Calculator.o $(BIN)/ExactNumber.o
 	@mkdir -p $(BIN)
 	$(CXX) $(CXXLINKFLAGS) $^ -o $@
 
@@ -33,4 +33,7 @@ $(BIN)/%.o: $(SRC)/%.cpp
 	@mkdir -p $(BIN)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(BIN)/main.o: $(SRC)/main.cpp
+$(BIN)/main.o: $(SRC)/main.cpp $(SRC)/Calculator.hpp
+$(BIN)/Calculator.o: $(SRC)/Calculator.cpp $(SRC)/ExactNumber.hpp
+$(BIN)/ExactNumber.o: $(SRC)/ExactNumber.cpp
+
