@@ -9,12 +9,14 @@ int ExactNumber::gcd_recursive(int a, int b) {
 
 void ExactNumber::short_fraction() {
   int gcd = ExactNumber::gcd_recursive(numerator, denominator);
-  if (gcd == 1)
-    return;
+
   numerator /= gcd;
   denominator /= gcd;
 
-  // TODO 1/-3 is ugly
+  if (numerator > 0 && denominator < 0) {
+    numerator *= -1;
+    denominator *= -1;
+  }
 }
 
 ExactNumber::ExactNumber(long numerator, long denominator)
