@@ -1,6 +1,8 @@
 #include "Calculator.hpp"
+#include <stdexcept>
 
 using std::cout, std::endl;
+using std::invalid_argument;
 using std::pair, std::vector;
 using std::string;
 
@@ -20,7 +22,7 @@ ExactNumber Calculator::processNumericOperators(string left, string right,
   else if (opt == "*")
     return l * r;
   else
-    throw std::invalid_argument("Neznámý operátor");
+    throw invalid_argument("Neznámý operátor");
 }
 
 bool Calculator::processLogicOperators(string left, string right, string opt) {
@@ -47,6 +49,8 @@ bool Calculator::processLogicOperators(string left, string right, string opt) {
 void Calculator::processLine(string &line) {
   size_t pos;
   vector<string> words;
+
+  // Split line to words
   while ((pos = line.find(delimiter)) != string::npos) {
     words.push_back(line.substr(0, pos));
     line.erase(0, pos + delimiter.length());
@@ -55,6 +59,7 @@ void Calculator::processLine(string &line) {
   if (!line.empty())
     words.push_back(line);
 
+  // Check number of words
   if (words.size() < 3) {
     cout << "Příliš málo argumentů." << endl;
     return;
@@ -88,10 +93,14 @@ void Calculator::start() {
 
   cout << "Co chcete dělat?" << endl;
   while (std::getline(std::cin, line)) {
-    if (line == "q")
+    if (line == "exit")
       break;
 
-    processLine(line);
+    try {
+      processLine(line);
+    } catch (const invalid_argument &e) {
+      cout << "Error: " << e.what() << "\n";
+    }
 
     cout << "----------------------------------\n";
     if (!variables.empty()) {
