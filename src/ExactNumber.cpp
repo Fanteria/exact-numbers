@@ -10,9 +10,12 @@ int ExactNumber::gcd_recursive(int a, int b) {
 void ExactNumber::short_fraction() {
   int gcd = ExactNumber::gcd_recursive(numerator, denominator);
 
+  // If numerator and denominator is negative, gcd will be negative too and this
+  // will convert to positive numbers too.
   numerator /= gcd;
   denominator /= gcd;
 
+  // Swap - if is in denominator
   if (numerator > 0 && denominator < 0) {
     numerator *= -1;
     denominator *= -1;
