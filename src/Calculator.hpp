@@ -7,7 +7,7 @@
 
 class Calculator {
   std::map<std::string, ExactNumber> variables;
-  std::string delimiter = " ";
+  const std::string delimiter = " ";
   const std::set<std::string> numOperators = {"+", "-", "/", "*"};
   const std::set<std::string> logOperators = {"==", "!=", ">", ">=", "<", "<="};
 
