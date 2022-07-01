@@ -23,7 +23,7 @@ ExactNumber Calculator::processNumericOperators(string left, string right,
   else if (opt == "*")
     return l * r;
   else
-    throw invalid_argument("Neznámý operátor");
+    throw invalid_argument("Unknow operator.");
 }
 
 bool Calculator::processLogicOperators(string left, string right, string opt) {
@@ -45,7 +45,7 @@ bool Calculator::processLogicOperators(string left, string right, string opt) {
   else if (opt == "<")
     return l < r;
   else
-    throw std::invalid_argument("Neznámý operátor");
+    throw std::invalid_argument("Unknow operator.");
 }
 
 void Calculator::processLine(string &line) {
@@ -63,7 +63,7 @@ void Calculator::processLine(string &line) {
 
   // Check number of words
   if (words.size() < 3) {
-    cout << "Příliš málo argumentů." << endl;
+    cout << "Too many arguments." << endl;
     return;
   }
 
@@ -77,11 +77,11 @@ void Calculator::processLine(string &line) {
       variables.insert(std::pair<std::string, ExactNumber>(
           words[0], processNumericOperators(words[2], words[4], words[3])));
     } else {
-      cout << "Špatný počet argumentů pro =.\n";
+      cout << "Wrong number of arguments for =.\n";
     }
     // Operator is in numeric operators
   } else if (numOperators.count(opt)) {
-    cout << "Výsledek: ";
+    cout << "Result: ";
     cout << processNumericOperators(words[0], words[2], words[1]);
     cout << "\n";
     // Operator is in logic operators
@@ -90,14 +90,14 @@ void Calculator::processLine(string &line) {
                                                                    : "False");
     cout << "\n";
   } else {
-    cout << "Neznámý operátor.\n";
+    cout << "Unknow operator.\n";
   }
 }
 
 void Calculator::start() {
   string line;
 
-  cout << "Co chcete dělat?" << endl;
+  cout << "What do you want to do?" << endl;
   while (std::getline(std::cin, line)) {
     if (line == "exit")
       break;
@@ -111,10 +111,10 @@ void Calculator::start() {
 
     cout << "----------------------------------\n";
     if (!variables.empty()) {
-      cout << "Uložené proměnné:\n";
+      cout << "Stored variables:\n";
       for (auto const &var : variables)
         cout << var.first << " = " << var.second << '\n';
     }
-    cout << "Co chcete dělat?" << endl;
+    cout << "What do you want to do?" << endl;
   }
 }
